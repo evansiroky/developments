@@ -1,0 +1,12 @@
+@import url(https://unpkg.com/leaflet@1.0.2/dist/leaflet.css);
+@import url(https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css);
+
+/*
+ * react-leaflet is silly, you have to manually style the divs it creates
+ * https://github.com/PaulLeCam/react-leaflet/blob/master/example/index.html
+ * https://github.com/PaulLeCam/react-leaflet/issues/108
+ */
+.leaflet-container {
+	height: 100%;
+	width: 100%;
+}
