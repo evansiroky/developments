@@ -12,10 +12,7 @@ app.use('/assets', express.static(path.resolve(__dirname, '../assets')))
 
 // webapp
 app.get('*', (req, res) => {
-  if (['/', '/login'].indexOf(req.originalUrl) === -1) {
-    return res.redirect('/')
-  }
-  res.status(200).type('html').send(html({title: 'Santa Cruz Developments'}))
+  res.status(200).type('html').send(html({staticHost: '/', title: 'Santa Cruz Developments'}))
 })
 
 app.listen(app.get('port'), function () {
