@@ -5,10 +5,11 @@
   "author": "Evan Siroky <evan.siroky@yahoo.com>",
   "scripts": {
     "build": "mastarm build",
+    "clean:db": "DATABASE_URL=postgres://developments_user:supersecretpassword@localhost:5432/developments node server/setupDb.js",
     "start": "npm run build && node server/index.js",
     "watch": "npm-run-all --parallel watch:client watch:server",
     "watch:client": "mastarm build -e development --watch",
-    "watch:server": "nodemon --watch server server/index.js"
+    "watch:server": "DATABASE_URL=postgres://developments_user:supersecretpassword@localhost:5432/developments nodemon --watch server server/index.js"
   },
   "devDependencies": {
     "nodemon": "^1.11.0",
@@ -16,9 +17,13 @@
   },
   "dependencies": {
     "@conveyal/woonerf": "^2.2.1",
+    "body-parser": "^1.17.1",
+    "epilogue": "^0.7.1",
     "express": "^4.15.2",
+    "isomorphic-fetch": "^2.2.1",
     "leaflet": "^1.0.3",
     "mastarm": "^3.6.0",
+    "pg": "^6.1.5",
     "react-bootstrap": "^0.30.8",
     "react-dom": "^15.4.2",
     "react-leaflet": "^1.1.3",

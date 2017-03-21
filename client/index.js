@@ -1,4 +1,5 @@
 
+require('isomorphic-fetch')
 import React, {Component} from 'react'
 import {Nav, Navbar, NavItem} from 'react-bootstrap'
 import {render} from 'react-dom'
@@ -9,20 +10,25 @@ import DevelopmentMap from './development-map.js'
 
 class App extends Component {
   state = {
-    developments: [{
-      id: '1',
-      name: 'Sprawl',
-      position: [37.066111, -121.990876]
-    }, {
-      id: '2',
-      name: 'Townhomes',
-      position: [37.052976, -122.013837]
-    }]
+    developments: []
   }
 
   // ------------------------------------------------------------------------
   // Lifecycle fns
   // ------------------------------------------------------------------------
+
+  componentWillMount () {
+    fetch('api/developments')
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        this.setState({developments: data})
+      })
+      .catch((err) => {
+        alert('Could not load data.  Please try again later.')
+      })
+  }
 
   // ------------------------------------------------------------------------
   // handler fns
