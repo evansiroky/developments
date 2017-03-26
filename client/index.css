@@ -1,3 +1,4 @@
+@import url(node_modules/font-awesome/css/font-awesome.css);
 @import url(https://unpkg.com/leaflet@1.0.2/dist/leaflet.css);
 @import url(https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css);
 
@@ -9,4 +10,24 @@
 .leaflet-container {
 	height: 100%;
 	width: 100%;
+}
+
+/*
+ * Development Content
+ */
+.development-content {
+	padding-top: 10px;
+}
+
+.development-image-container {
+	text-align: center;
+	width: 100%;
+}
+
+.development-image-container.no-picture-yet {
+	background-color: #C9C9C9;
+}
+
+.development-image-container img {
+	max-height: 300px;
 }

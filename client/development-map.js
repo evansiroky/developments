@@ -23,8 +23,22 @@ class DevelopmentMap extends Component {
   // handler fns
   // ------------------------------------------------------------------------
 
-  _handleMarkerClick = (e) => {
+  _onMarkerClick = (e) => {
     this.props.router.history.push(`/development/${e.target.options.development.id}`)
+  }
+
+  _onMapClick = (e) => {
+    const {create, router} = this.props
+    create({
+      geom: {
+        coordinates: [e.latlng.lat, e.latlng.lng],
+        crs: { type: 'name', properties: { name: 'EPSG:4326'} },
+        type: 'Point'
+      }
+    })
+      .then((development) => {
+        router.history.push(`/development/${development.id}`)
+      })
   }
 
   _updateDimensions = () => {
@@ -36,7 +50,10 @@ class DevelopmentMap extends Component {
     const {developments} = this.props
     return (
       <div style={{height: this.state.mapHeight}}>
-        <Map center={[37.062716, -122.005770]} zoom={13}>
+        <Map
+          center={[37.062716, -122.005770]}
+          onClick={this._onMapClick}
+          zoom={13}>
           <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
@@ -44,9 +61,9 @@ class DevelopmentMap extends Component {
           {developments.map((development) =>
             <Marker
               development={development}
-              key={`marker-${development.name}`}
-              onClick={this._handleMarkerClick}
-              position={development.position}
+              key={`marker-${development.id}`}
+              onClick={this._onMarkerClick}
+              position={development.geom.coordinates}
               />
           )}
         </Map>

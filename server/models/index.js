@@ -4,7 +4,9 @@ const fs = require('fs')
 const path = require('path')
 const Sequelize = require('sequelize')
 
-const sequelize = new Sequelize(process.env.DATABASE_URL)
+const env = require('../util/env')
+
+const sequelize = new Sequelize(env.DATABASE_URL)
 const db = {}
 
 fs.readdirSync(__dirname)
