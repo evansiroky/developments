@@ -9,6 +9,9 @@ export default class RestResource {
   _genericRequest (url, options) {
     return fetch(url, options)
       .then((response) => {
+        if (response.status >= 400) {
+          throw response
+        }
         return response.json()
       })
       .catch((err) => {

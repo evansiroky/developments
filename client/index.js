@@ -55,6 +55,7 @@ class App extends Component {
     const {developments} = this.state
     return developmentsResource.collectionPost(newData)
       .then((newDevelopment) => {
+        if (!newDevelopment) return
         developments.push(newDevelopment)
         this.setState({ developments })
         return newDevelopment
@@ -65,6 +66,7 @@ class App extends Component {
     const {developments} = this.state
     return developmentsResource.put(data)
       .then((data) => {
+        if (!data) return
         developments[this._findDevelopmentIdx(data.id)] = data
         this.setState({ developments })
         return data
@@ -75,7 +77,8 @@ class App extends Component {
     const {developments} = this.state
     let developmentIdx
     developmentsResource.delete(developmentId)
-      .then(() => {
+      .then((data) => {
+        if (!data) return
         developments.splice(developmentIdx, 1)
         this.setState({ developments })
       })
