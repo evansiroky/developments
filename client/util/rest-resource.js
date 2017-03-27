@@ -19,15 +19,6 @@ export default class RestResource {
 
   collectionGet () {
     return this._genericRequest(`/api/${this.endpointName}s`)
-      .then((data) => {
-        // TODO: find a better way to handle geom crs
-        return data.map((record) => {
-          if (record.geom) {
-            record.geom.crs = { type: 'name', properties: { name: 'EPSG:4326'} }
-          }
-          return record
-        })
-      })
   }
 
   collectionPost (data) {

@@ -32,7 +32,6 @@ class DevelopmentMap extends Component {
     create({
       geom: {
         coordinates: [e.latlng.lat, e.latlng.lng],
-        crs: { type: 'name', properties: { name: 'EPSG:4326'} },
         type: 'Point'
       }
     })

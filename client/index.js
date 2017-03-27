@@ -1,5 +1,4 @@
 
-import {List} from 'immutable'
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 import {BrowserRouter as Router, Redirect, Route} from 'react-router-dom'
@@ -23,7 +22,7 @@ class App extends Component {
   componentWillMount () {
     developmentsResource.collectionGet()
       .then((data) => {
-        this.setState({developments: List(data)})
+        this.setState({developments: data})
       })
   }
 
@@ -56,9 +55,8 @@ class App extends Component {
     const {developments} = this.state
     return developmentsResource.collectionPost(newData)
       .then((newDevelopment) => {
-        this.setState({
-          developments: developments.push(newDevelopment)
-        })
+        developments.push(newDevelopment)
+        this.setState({ developments })
         return newDevelopment
       })
   }
@@ -67,21 +65,19 @@ class App extends Component {
     const {developments} = this.state
     return developmentsResource.put(data)
       .then((data) => {
-        this.setState({
-          developments: developments.set(this._findDevelopmentIdx(data.id), data)
-        })
+        developments[this._findDevelopmentIdx(data.id)] = data
+        this.setState({ developments })
         return data
       })
   }
 
-  deleteDevelopment = (developmentId) => {
+  _deleteDevelopment = (developmentId) => {
     const {developments} = this.state
     let developmentIdx
     developmentsResource.delete(developmentId)
       .then(() => {
-        this.setState({
-          developments: developments.unshift(developmentIdx)
-        })
+        developments.splice(developmentIdx, 1)
+        this.setState({ developments })
       })
     developmentIdx = this._findDevelopmentIdx(developmentId)
   }
@@ -122,7 +118,7 @@ class App extends Component {
             developments={developments}
             />
           <Route path='/development/:id' render={({match}) => {
-            if (developments.length === 0) return null
+            if (developments.length === 0) return <Redirect to='/' />
             const selectedDevelopment = this._findDevelopment(match.params.id)
             if (selectedDevelopment) {
               return (

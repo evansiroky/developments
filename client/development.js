@@ -27,7 +27,7 @@ class Development extends Component {
   }
 
   _onDeleteClick = () => {
-    if (window.confirm('Are you sure you want to delte this development?')) {
+    if (window.confirm('Are you sure you want to delete this development?')) {
       this.props.delete(this.state.development.id)
     }
   }
@@ -159,6 +159,13 @@ class Development extends Component {
             </div>
             <h4>Description</h4>
             <p>{data.description ? data.description : 'No description of this project'}</p>
+            <button
+              className='btn btn-danger pull-right'
+              onClick={this._onDeleteClick}
+              type='button'
+              >
+              Delete
+            </button>
           </div>
         }
         {editing &&
