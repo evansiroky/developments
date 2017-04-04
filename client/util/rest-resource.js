@@ -7,7 +7,10 @@ export default class RestResource {
   }
 
   _genericRequest (url, options) {
-    return fetch(url, options)
+    return fetch(url, {
+      ...options,
+      ...this.createAuthorizationHeader()
+    })
       .then((response) => {
         if (response.status >= 400) {
           throw response
@@ -32,6 +35,12 @@ export default class RestResource {
       },
       body: JSON.stringify(data)
     })
+  }
+
+  createAuthorizationHeader () {
+    return this.idToken
+      ? {Authorization: `bearer ${this.idToken}`}
+      : {}
   }
 
   delete (id) {

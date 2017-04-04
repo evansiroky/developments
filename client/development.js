@@ -117,8 +117,12 @@ class Development extends Component {
   }
 
   render () {
-    const {development, editing, imagePreview} = this.state
+    const {auth} = this.props
+    const {development, imagePreview} = this.state
     const {data} = development
+
+    const isAdmin = auth.profile && auth.profile.user_metadata && auth.profile.user_metadata.isAdmin
+    const editing = isAdmin && this.state.editing
 
     return (
       <Modal
@@ -139,7 +143,7 @@ class Development extends Component {
             ? <input value={data.name} onChange={this._onNameChange} />
             : <span>{data.name}</span>}
           <div className='btn-group pull-right'>
-            {!editing &&
+            {!editing && isAdmin &&
               <button className='btn btn-default' onClick={this._handleEdit}>
                 <i className='fa fa-pencil fa-fw' />
               </button>
@@ -159,13 +163,15 @@ class Development extends Component {
             </div>
             <h4>Description</h4>
             <p>{data.description ? data.description : 'No description of this project'}</p>
-            <button
-              className='btn btn-danger pull-right'
-              onClick={this._onDeleteClick}
-              type='button'
-              >
-              Delete
-            </button>
+            {isAdmin &&
+              <button
+                className='btn btn-danger pull-right'
+                onClick={this._onDeleteClick}
+                type='button'
+                >
+                Delete
+              </button>
+            }
           </div>
         }
         {editing &&

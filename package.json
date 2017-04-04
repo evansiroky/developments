@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@conveyal/woonerf": "^2.2.1",
+    "auth0-lock": "^10.14.0",
     "aws-sdk": "^2.31.0",
     "body-parser": "^1.17.1",
     "epilogue": "^0.7.1",

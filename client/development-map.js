@@ -63,6 +63,7 @@ class DevelopmentMap extends Component {
               key={`marker-${development.id}`}
               onClick={this._onMarkerClick}
               position={development.geom.coordinates}
+              title={development.data.name}
               />
           )}
         </Map>

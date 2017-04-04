@@ -5,9 +5,11 @@ import {BrowserRouter as Router, Redirect, Route} from 'react-router-dom'
 
 import Development from './development'
 import DevelopmentMap from './development-map.js'
+import AuthService from './util/auth-service'
 import RestResource from './util/rest-resource'
 
 const developmentsResource = new RestResource('development')
+const auth = new AuthService(process.env.AUTH0_CLIENT_ID, process.env.AUTH0_DOMAIN, [developmentsResource])
 
 class App extends Component {
   state = {
@@ -29,6 +31,10 @@ class App extends Component {
   // ------------------------------------------------------------------------
   // handler fns
   // ------------------------------------------------------------------------
+
+  _onLoginClick = () => {
+    auth.login()
+  }
 
   _onToggleNav = () => {
     this.setState({ navCollapsed: !this.state.navCollapsed })
@@ -110,9 +116,7 @@ class App extends Component {
               className={(navCollapsed ? 'collapse' : '') + ' navbar-collapse'}
               >
               <ul className='nav navbar-nav navbar-right'>
-                <li>
-                  <a>About</a>
-                </li>
+                <li><a onClick={this._onLoginClick}>Login</a></li>
               </ul>
             </div>
           </nav>
@@ -126,6 +130,7 @@ class App extends Component {
             if (selectedDevelopment) {
               return (
                 <Development
+                  auth={auth}
                   create={this._createDevelopment}
                   delete={this._deleteDevelopment}
                   development={selectedDevelopment}
