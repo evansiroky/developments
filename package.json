@@ -11,7 +11,7 @@
     "build": "mastarm build -m",
     "deploy": "mastarm deploy -m",
     "clean:db": "DATABASE_URL=postgres://developments_user:supersecretpassword@localhost:5432/developments node server/setupDb.js",
-    "start": "npm run build && node server/index.js",
+    "start": "node server/index.js",
     "watch": "npm-run-all --parallel watch:client watch:server",
     "watch:client": "mastarm build -e development --watch",
     "watch:server": "nodemon --watch server server/index.js"
