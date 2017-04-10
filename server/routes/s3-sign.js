@@ -1,11 +1,12 @@
 const S3 = require('aws-sdk/clients/s3')
 
+const auth = require('../auth')
 const env = require('../util/env')
 
 const S3_BUCKET = env.S3_BUCKET
 
 module.exports = (app) => {
-  app.get('/sign-s3', (req, res) => {
+  app.get('/sign-s3', [auth.authRequired, auth.adminRequired], (req, res) => {
     const s3 = new S3()
     const fileName = req.query['file-name']
     const fileType = req.query['file-type']
@@ -17,12 +18,9 @@ module.exports = (app) => {
       ACL: 'public-read'
     }
 
-    console.log(process.env)
-    console.log(s3Params)
-
     s3.getSignedUrl('putObject', s3Params, (err, data) => {
       if(err){
-        console.log(err)
+        console.error(err)
         return res.status(500).send({error: err})
       }
       const returnData = {

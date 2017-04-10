@@ -80,6 +80,7 @@ class Development extends Component {
   }
 
   _onImageFileChange = (e) => {
+    const {auth} = this.props
     const imageFile = e.target.files[0]
     if (imageFile) {
       const reader = new FileReader()
@@ -93,7 +94,11 @@ class Development extends Component {
 
       reader.readAsDataURL(imageFile)
 
-      fetch(`/sign-s3?file-name=${imageFile.name}&file-type=${imageFile.type}`)
+      fetch(`/sign-s3?file-name=${imageFile.name}&file-type=${imageFile.type}`, {
+        headers: auth.isAdmin()
+          ? {Authorization: `bearer ${auth.getToken()}`}
+          : {}
+      })
         .then((result) => {
           if (result.status === 500) {
             throw result
@@ -121,7 +126,7 @@ class Development extends Component {
     const {development, imagePreview} = this.state
     const {data} = development
 
-    const isAdmin = auth.profile && auth.profile.user_metadata && auth.profile.user_metadata.isAdmin
+    const isAdmin = auth.isAdmin()
     const editing = isAdmin && this.state.editing
 
     return (

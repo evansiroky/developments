@@ -121,6 +121,7 @@ class App extends Component {
             </div>
           </nav>
           <DevelopmentMap
+            auth={auth}
             create={this._createDevelopment}
             developments={developments}
             />

@@ -5,6 +5,9 @@ export default class AuthService {
     // Configure Auth0
     this.lock = new Auth0Lock(clientId, domain, {
       auth: {
+        params: {
+          scope: 'openid email user_metadata'
+        },
         redirect: false
       },
       autoclose: true
@@ -32,6 +35,12 @@ export default class AuthService {
       if (error) return
       this.profile = profile
     })
+  }
+
+  isAdmin () {
+    return !!(this.profile &&
+      this.profile.user_metadata &&
+      this.profile.user_metadata.isAdmin)
   }
 
   login() {

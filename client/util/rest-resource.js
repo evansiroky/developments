@@ -1,16 +1,14 @@
 
 require('isomorphic-fetch')
+import merge from 'lodash.merge'
 
 export default class RestResource {
   constructor (endpointName) {
     this.endpointName = endpointName
   }
 
-  _genericRequest (url, options) {
-    return fetch(url, {
-      ...options,
-      ...this.createAuthorizationHeader()
-    })
+  _genericRequest (url, options={}) {
+    return fetch(url, merge(options, this.createAuthorizationHeader()))
       .then((response) => {
         if (response.status >= 400) {
           throw response
@@ -39,7 +37,7 @@ export default class RestResource {
 
   createAuthorizationHeader () {
     return this.idToken
-      ? {Authorization: `bearer ${this.idToken}`}
+      ? { headers: { Authorization: `bearer ${this.idToken}`} }
       : {}
   }
 

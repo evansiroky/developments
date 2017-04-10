@@ -28,16 +28,18 @@ class DevelopmentMap extends Component {
   }
 
   _onMapClick = (e) => {
-    const {create, router} = this.props
-    create({
-      geom: {
-        coordinates: [e.latlng.lat, e.latlng.lng],
-        type: 'Point'
-      }
-    })
-      .then((development) => {
-        router.history.push(`/development/${development.id}`)
+    const {auth, create, router} = this.props
+    if (auth.isAdmin()) {
+      create({
+        geom: {
+          coordinates: [e.latlng.lat, e.latlng.lng],
+          type: 'Point'
+        }
       })
+        .then((development) => {
+          router.history.push(`/development/${development.id}`)
+        })
+    }
   }
 
   _updateDimensions = () => {

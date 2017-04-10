@@ -8,6 +8,7 @@ const db = require('./models')
 
 const app = express()
 
+// forward to https if in production
 if (process.env.NODE_ENV === 'production') {
   app.use((req, res, next) => {
     if (req.headers['x-forwarded-proto'] !== 'https') {
@@ -16,7 +17,6 @@ if (process.env.NODE_ENV === 'production') {
     return next()
   })
 }
-
 
 app.set('port', (process.env.PORT || 5000))
 
