@@ -1,6 +1,9 @@
+import {icon} from 'leaflet'
 import React, {Component, PropTypes} from 'react'
 import {Map, Marker, TileLayer} from 'react-leaflet'
 import {withRouter} from 'react-router'
+
+import Legend from './legend'
 
 class DevelopmentMap extends Component {
   static propTypes = {
@@ -67,12 +70,17 @@ class DevelopmentMap extends Component {
           {developments.map((development) =>
             <Marker
               development={development}
+              icon={getMarkerIcon(development)}
               key={`marker-${development.id}`}
               onClick={this._onMarkerClick}
               position={development.geom.coordinates}
               title={development.data.name}
               />
           )}
+          <Legend
+            html={legendHTML}
+            position='bottomright'
+            />
         </Map>
       </div>
     )
@@ -80,3 +88,57 @@ class DevelopmentMap extends Component {
 }
 
 export default withRouter(DevelopmentMap)
+
+const defaultIconCfg = {
+  iconSize: [32, 37],
+  iconAnchor: [16, 37]
+}
+
+const legendHTML = '<div class="map-legend"><h4>Legend</h4><table><tbody>'
+
+function getMarkerIcon (development) {
+  const statusesLength = development.data.statuses.length
+  if (statusesLength === 0 ||
+    (['Application Submitted', 'Permits Issued', 'Under Construction', 'Completed'])
+      .indexOf(development.data.statuses[statusesLength - 1].type) === -1) return mapIcons['?']
+  return mapIcons[development.data.statuses[statusesLength - 1].type]
+}
+
+const iconHost = 'assets/'
+
+const mapIcons = {
+  '?': icon(Object.assign({
+    iconUrl: `${iconHost}unknown-status.png`,
+  }, defaultIconCfg)),
+  'Application Submitted': icon(Object.assign({
+    iconUrl: `${iconHost}contract.png`,
+  }, defaultIconCfg)),
+  'Permits Issued': icon(Object.assign({
+    iconUrl: `${iconHost}gavel-auction-fw.png`,
+  }, defaultIconCfg)),
+  'Under Construction': icon(Object.assign({
+    iconUrl: `${iconHost}constructioncrane.png`,
+  }, defaultIconCfg)),
+  'Completed': icon(Object.assign({
+    iconUrl: `${iconHost}office-building.png`,
+  }, defaultIconCfg)),
+}
+
+const statuses = [{
+  iconUrl: 'contract.png',
+  text: 'Application Submitted'
+}, {
+  iconUrl: 'gavel-auction-fw.png',
+  text: 'Permits Issued'
+}, {
+  iconUrl: 'constructioncrane.png',
+  text: 'Under Construction'
+}, {
+  iconUrl: 'office-building.png',
+  text: 'Completed'
+}]
+statuses.forEach((status) => {
+  legendHTML += `<tr><td><img src="${iconHost}${status.iconUrl}"/></td><td>${status.text}</td></tr>`
+})
+legendHTML += '</tbody></table>'
+legendHTML += '<p>Icons by <a href="https://mapicons.mapsmarker.com/">Maps Icons Collection</a>.</p></div>'

@@ -30,6 +30,7 @@
     "leaflet": "^1.0.3",
     "lodash.merge": "^4.6.0",
     "mastarm": "^3.6.0",
+    "moment": "^2.18.1",
     "pg": "^6.1.5",
     "react-dom": "^15.4.2",
     "react-leaflet": "^1.1.3",

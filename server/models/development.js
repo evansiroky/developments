@@ -9,15 +9,12 @@ module.exports = function (sequelize, DataTypes) {
     data: {
       defaultValue: {
         description: 'No description... yet.',
-        name: 'New Development'
+        name: 'New Development',
+        statuses: []
       },
       type: DataTypes.JSON
     },
-    geom: DataTypes.GEOMETRY('POINT', 4326),
-    public: {
-      defaultValue: false,
-      type: DataTypes.BOOLEAN
-    }
+    geom: DataTypes.GEOMETRY('POINT', 4326)
   }, {
     freezeTableName: true,
     hooks: {

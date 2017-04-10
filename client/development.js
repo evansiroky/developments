@@ -1,5 +1,6 @@
 
 require('isomorphic-fetch')
+import moment from 'moment'
 import React, {Component} from 'react'
 import Modal from 'react-modal'
 import {withRouter} from 'react-router'
@@ -73,6 +74,21 @@ class Development extends Component {
   // form handlers
   // ----------------------------------------------------------------
 
+  _onAddStatusRow = () => {
+    const {development} = this.state
+    development.data.statuses.splice(0, 0, {
+      date: moment().format('YYYY-MM-DD'),
+      type: '?'
+    })
+    this.setState({development})
+  }
+
+  _onDeleteStatusRow (idx) {
+    const {development} = this.state
+    development.data.statuses.splice(idx, 1)
+    this.setState({development})
+  }
+
   _onDescriptionChange = (e) => {
     const {development} = this.state
     development.data.description = e.target.value
@@ -121,6 +137,18 @@ class Development extends Component {
     this.setState({development})
   }
 
+  _onStatusChange (key, idx, e) {
+    const {development} = this.state
+    development.data.statuses[idx][key] = e.target.value
+    this.setState({development})
+  }
+
+  _onWebsiteChange = (e) => {
+    const {development} = this.state
+    development.data.website = e.target.value
+    this.setState({development})
+  }
+
   render () {
     const {auth} = this.props
     const {development, imagePreview} = this.state
@@ -166,17 +194,41 @@ class Development extends Component {
                 : (<img src={'https://s3-us-west-1.amazonaws.com/santacruzcountydevelopments/picture-coming-soon.png'} />)
               }
             </div>
-            <h4>Description</h4>
-            <p>{data.description ? data.description : 'No description of this project'}</p>
-            {isAdmin &&
-              <button
-                className='btn btn-danger pull-right'
-                onClick={this._onDeleteClick}
-                type='button'
-                >
-                Delete
-              </button>
-            }
+            <div>
+              <div className='col-xs-12 col-sm-4'>
+                <h4>Status</h4>
+                <table className='table table-striped'>
+                  <tbody>
+                    {data.statuses.map((status, idx) => (
+                      <tr className={idx === 0 ? 'first-status' : undefined}>
+                        <td>{moment(status.date).format('MMM D, YYYY')}</td>
+                        <td>{status.type}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className='col-xs-12 col-sm-8'>
+                <h4>Description</h4>
+                <p>{data.description ? data.description : 'No description of this project'}</p>
+                {data.website &&
+                  <p>
+                    <a href={data.website} target='_blank'>View project website</a>
+                  </p>
+                }
+              </div>
+              {isAdmin &&
+                <div className='col-xs-12'>
+                  <button
+                    className='btn btn-danger pull-right'
+                    onClick={this._onDeleteClick}
+                    type='button'
+                    >
+                    Delete
+                  </button>
+                </div>
+              }
+            </div>
           </div>
         }
         {editing &&
@@ -194,13 +246,69 @@ class Development extends Component {
               </div>
             }
             <input type="file" onChange={this._onImageFileChange} />
-            <label>Description</label>
-            <div className='form-group'>
-              <textarea
-                className='form-control'
-                onChange={this._onDescriptionChange}
-                value={data.description}
-                />
+            <div>
+              <div className='col-xs-12 col-sm-6'>
+                <h4>Status</h4>
+                <button
+                  className='btn'
+                  onClick={this._onAddStatusRow}
+                  >
+                  Add Status
+                </button>
+                <table className='table table-striped'>
+                  <tbody>
+                    {data.statuses.map((status, idx) => (
+                      <tr key={`dev-${development.id}-status-${idx}`}>
+                        <td>
+                          <input
+                            onChange={(e) => this._onStatusChange('date', idx, e)}
+                            value={status.date}
+                            />
+                        </td>
+                        <td>
+                          <select
+                            onChange={(e) => this._onStatusChange('type', idx, e)}
+                            value={status.type}
+                            >
+                            <option value='?'>?</option>
+                            <option value='Application Submitted'>Application Submitted</option>
+                            <option value='Permits Issued'>Permits Issued</option>
+                            <option value='Under Construction'>Under Construction</option>
+                            <option value='Completed'>Completed</option>
+                          </select>
+                        </td>
+                        <td>
+                          <button
+                            className='btn btn-danger'
+                            type='button'
+                            onClick={() => this._onDeleteStatusRow(idx)}
+                            >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className='col-xs-12 col-sm-6'>
+                <label>Description</label>
+                <div className='form-group'>
+                  <textarea
+                    className='form-control'
+                    onChange={this._onDescriptionChange}
+                    value={data.description}
+                    />
+                </div>
+                <label>Website</label>
+                <div className='form-group'>
+                  <input
+                    className='form-control'
+                    onChange={this._onWebsiteChange}
+                    value={data.website}
+                    />
+                </div>
+              </div>
             </div>
             <div className='btn-group pull-right'>
               <button className='btn btn-warning' type='button' onClick={this._onSaveClick}>Save</button>

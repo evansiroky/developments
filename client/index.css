@@ -12,6 +12,25 @@
 	width: 100%;
 }
 
+.map-legend {
+	background-color: #fff;
+	border-radius: 10px;
+	padding: 1px 10px;
+}
+
+.map-legend h4 {
+	margin-top: 5px
+}
+
+.map-legend img {
+	margin: 5px
+}
+
+.map-legend p {
+	font-size: 8px;
+	margin-top: 10px;
+}
+
 /*
  * Development Content
  */
@@ -20,6 +39,8 @@
 }
 
 .development-image-container {
+	border-bottom: 1px solid #dbdbdb;
+	padding-bottom: 10px;
 	text-align: center;
 	width: 100%;
 }
@@ -30,4 +51,8 @@
 
 .development-image-container img {
 	max-height: 300px;
+}
+
+.first-status {
+	font-weight: bold;
 }
