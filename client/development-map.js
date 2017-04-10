@@ -24,6 +24,11 @@ class DevelopmentMap extends Component {
   // ------------------------------------------------------------------------
 
   _onMarkerClick = (e) => {
+    ga('send', 'event', {
+      eventCategory: 'Development',
+      eventAction: 'View',
+      eventLabel: 'Map Marker Click'
+    })
     this.props.router.history.push(`/development/${e.target.options.development.id}`)
   }
 
