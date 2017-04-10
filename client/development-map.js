@@ -104,7 +104,7 @@ function getMarkerIcon (development) {
   return mapIcons[development.data.statuses[statusesLength - 1].type]
 }
 
-const iconHost = 'assets/'
+const iconHost = process.env.STATIC_HOST
 
 const mapIcons = {
   '?': icon(Object.assign({

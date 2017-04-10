@@ -20,8 +20,12 @@ if (process.env.NODE_ENV === 'production') {
 
 app.set('port', (process.env.PORT || 5000))
 
-// static assets
-app.use('/assets', express.static(path.resolve(__dirname, '../assets')))
+let staticHost = process.env.STATIC_HOST
+if (process.env.NODE_ENV !== 'production') {
+  // static assets
+  app.use('/assets', express.static(path.resolve(__dirname, '../assets')))
+  staticHost = '/'
+}
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -30,7 +34,7 @@ require('./routes')(app, db)
 
 // webapp
 app.get('*', (req, res) => {
-  res.status(200).type('html').send(html({staticHost: '/', title: 'Santa Cruz Developments'}))
+  res.status(200).type('html').send(html({staticHost: staticHost, title: 'Santa Cruz Developments'}))
 })
 
 app.listen(app.get('port'), function () {

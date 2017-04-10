@@ -3,8 +3,13 @@
   "version": "1.0.0",
   "description": "A website to showcase new building developments",
   "author": "Evan Siroky <evan.siroky@yahoo.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evansiroky/developments.git"
+  },
   "scripts": {
     "build": "mastarm build -m",
+    "deploy": "mastarm deploy -m",
     "clean:db": "DATABASE_URL=postgres://developments_user:supersecretpassword@localhost:5432/developments node server/setupDb.js",
     "start": "npm run build && node server/index.js",
     "watch": "npm-run-all --parallel watch:client watch:server",
