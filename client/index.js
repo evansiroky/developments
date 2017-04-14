@@ -21,6 +21,7 @@ const auth = new AuthService(process.env.AUTH0_CLIENT_ID, process.env.AUTH0_DOMA
 class App extends Component {
   state = {
     developments: [],
+    loadingDevelopments: true,
     navCollapsed: true
   }
 
@@ -31,7 +32,7 @@ class App extends Component {
   componentWillMount () {
     developmentsResource.collectionGet()
       .then((data) => {
-        this.setState({developments: data})
+        this.setState({developments: data, loadingDevelopments: false})
       })
   }
 
@@ -99,7 +100,7 @@ class App extends Component {
   }
 
   render () {
-    const {developments, navCollapsed} = this.state
+    const {developments, loadingDevelopments, navCollapsed} = this.state
 
     return (
       <Router>
@@ -133,6 +134,7 @@ class App extends Component {
             developments={developments}
             />
           <Route path='/development/:id' render={({match}) => {
+            if (loadingDevelopments) return null
             if (developments.length === 0) return <Redirect to='/' />
             const selectedDevelopment = this._findDevelopment(match.params.id)
             if (selectedDevelopment) {
