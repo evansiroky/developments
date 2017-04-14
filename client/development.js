@@ -188,11 +188,13 @@ class Development extends Component {
         </h3>
         {!editing &&
           <div className='development-content'>
-            <div className={`development-image-container ${data.picture ? '' : 'no-picture-yet'}`}>
-              {data.picture
-                ? (<img src={data.picture} />)
-                : (<img src={'https://s3-us-west-1.amazonaws.com/santacruzcountydevelopments/picture-coming-soon.png'} />)
-              }
+            <div className='col-xs-12'>
+              <div className={`development-image-container ${data.picture ? '' : 'no-picture-yet'}`}>
+                {data.picture
+                  ? (<img src={data.picture} />)
+                  : (<img src={'https://s3-us-west-1.amazonaws.com/santacruzcountydevelopments/picture-coming-soon.png'} />)
+                }
+              </div>
             </div>
             <div>
               <div className='col-xs-12 col-sm-4'>
@@ -234,19 +236,21 @@ class Development extends Component {
         {editing &&
           <div className='development-content'>
             <h3>id: {development.id}</h3>
-            <div className={`development-image-container ${data.picture ? '' : 'no-picture-yet'}`}>
-              {data.picture
-                ? (<img src={data.picture} />)
-                : (<p>No picture uploaded yet!</p>)}
-            </div>
-            {imagePreview &&
-              <div className='development-image-container'>
-                <p>Preview of new image:</p>
-                <img src={imagePreview} />
-              </div>
-            }
-            <input type="file" onChange={this._onImageFileChange} />
             <div>
+              <div className='col-xs-12'>
+                <div className={`development-image-container ${data.picture ? '' : 'no-picture-yet'}`}>
+                  {data.picture
+                    ? (<img src={data.picture} />)
+                    : (<p>No picture uploaded yet!</p>)}
+                </div>
+                {imagePreview &&
+                  <div className='development-image-container'>
+                    <p>Preview of new image:</p>
+                    <img src={imagePreview} />
+                  </div>
+                }
+                <input type="file" onChange={this._onImageFileChange} />
+              </div>
               <div className='col-xs-12 col-sm-6'>
                 <h4>Status</h4>
                 <button

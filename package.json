@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "mastarm build -m",
-    "deploy": "mastarm deploy -m",
+    "deploy": "mastarm deploy -m -c configurations/deploy",
     "clean:db": "DATABASE_URL=postgres://developments_user:supersecretpassword@localhost:5432/developments node server/setupDb.js",
     "start": "node server/index.js",
     "watch": "npm-run-all --parallel watch:client watch:server",
