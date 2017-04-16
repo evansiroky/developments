@@ -5,6 +5,12 @@ import React, {Component} from 'react'
 import Modal from 'react-modal'
 import {withRouter} from 'react-router'
 
+const jurisdictionLookup = [
+  'City of Scotts Valley',
+  'City of Santa Cruz',
+  'Santa Cruz County'
+]
+
 class Development extends Component {
 
   constructor (props) {
@@ -131,6 +137,12 @@ class Development extends Component {
     }
   }
 
+  _onJurisdictionChange = (e) => {
+    const {development} = this.state
+    development.data.jurisdiction = e.target.value
+    this.setState({development})
+  }
+
   _onNameChange = (e) => {
     const {development} = this.state
     development.data.name = e.target.value
@@ -198,6 +210,8 @@ class Development extends Component {
             </div>
             <div>
               <div className='col-xs-12 col-sm-4'>
+                <h4>Jurisdiction</h4>
+                <p>{jurisdictionLookup[data.jurisdiction]}</p>
                 <h4>Status</h4>
                 <table className='table table-striped'>
                   <tbody>
@@ -252,6 +266,15 @@ class Development extends Component {
                 <input type="file" onChange={this._onImageFileChange} />
               </div>
               <div className='col-xs-12 col-sm-6'>
+                <h4>Jurisdiction</h4>
+                <select
+                  onChange={this._onJurisdictionChange}
+                  value={data.jurisdiction}
+                  >
+                  {jurisdictionLookup.map((jurisdiction, idx) => (
+                    <option value={idx}>{jurisdiction}</option>
+                  ))}
+                </select>
                 <h4>Status</h4>
                 <button
                   className='btn'
