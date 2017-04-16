@@ -78,7 +78,8 @@ class DevelopmentMap extends Component {
               />
           )}
           <Legend
-            html={legendHTML}
+            collapsedHTML={collapsedLegendHTML}
+            fullHTML={fullLegendHTML}
             position='bottomright'
             />
         </Map>
@@ -89,12 +90,14 @@ class DevelopmentMap extends Component {
 
 export default withRouter(DevelopmentMap)
 
+const collapsedLegendHTML = '<div class="map-legend"><h4>Legend<i class="fa fa-caret-square-o-up fa-fw pull-right"></i></button></h4></div>'
+
 const defaultIconCfg = {
   iconSize: [32, 37],
   iconAnchor: [16, 37]
 }
 
-const legendHTML = '<div class="map-legend"><h4>Legend</h4><table><tbody>'
+const fullLegendHTML = '<div class="map-legend"><h4>Legend<i class="fa fa-caret-square-o-down fa-fw pull-right"></i></h4><table><tbody>'
 
 function getMarkerIcon (development) {
   const statusesLength = development.data.statuses.length
@@ -138,7 +141,7 @@ const statuses = [{
   text: 'Completed'
 }]
 statuses.forEach((status) => {
-  legendHTML += `<tr><td><img src="${iconHost}${status.iconUrl}"/></td><td>${status.text}</td></tr>`
+  fullLegendHTML += `<tr><td><img src="${iconHost}${status.iconUrl}"/></td><td>${status.text}</td></tr>`
 })
-legendHTML += '</tbody></table>'
-legendHTML += '<p>Icons by <a href="https://mapicons.mapsmarker.com/">Maps Icons Collection</a>.</p></div>'
+fullLegendHTML += '</tbody></table>'
+fullLegendHTML += '<p>Icons by <a href="https://mapicons.mapsmarker.com/">Maps Icons Collection</a>.</p></div>'
