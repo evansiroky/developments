@@ -1,6 +1,6 @@
 const S3 = require('aws-sdk/clients/s3')
 
-const env = require('../util/env')
+const env = require('../util/env').env
 
 const S3_BUCKET = env.S3_BUCKET
 
@@ -14,7 +14,18 @@ module.exports = function (sequelize, DataTypes) {
       },
       type: DataTypes.JSON
     },
-    geom: DataTypes.GEOMETRY('POINT', 4326)
+    geom: {
+      allowNull: false,
+      type: DataTypes.GEOMETRY('POINT', 4326)
+    },
+    jurisdiction_id: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    },
+    parcel_id: {
+      allowNull: false,
+      type: DataTypes.STRING(40)
+    }
   }, {
     freezeTableName: true,
     hooks: {

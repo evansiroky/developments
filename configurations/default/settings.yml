@@ -2,3 +2,8 @@ entries:
   - client/index.js:assets/index.js
   - client/index.css:assets/index.css
 s3bucket: santacruzcountydevelopments
+GEOCODE_BOUNDS:
+  minLon: -122.351303,
+  minLat: 36.800488,
+  maxLon: -121.499863,
+  maxLat: 37.315568

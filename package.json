@@ -17,8 +17,11 @@
     "watch:server": "nodemon --watch server server/index.js"
   },
   "devDependencies": {
+    "csv": "^1.1.1",
+    "lodash.isequal": "^4.5.0",
     "nodemon": "^1.11.0",
-    "npm-run-all": "^4.0.2"
+    "npm-run-all": "^4.0.2",
+    "yargs": "^7.1.0"
   },
   "dependencies": {
     "@conveyal/woonerf": "^2.2.1",

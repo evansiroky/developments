@@ -1,7 +1,7 @@
 const S3 = require('aws-sdk/clients/s3')
 
 const auth = require('../auth')
-const env = require('../util/env')
+const env = require('../util/env').env
 
 const S3_BUCKET = env.S3_BUCKET
 
