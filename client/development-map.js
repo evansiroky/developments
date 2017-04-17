@@ -60,9 +60,9 @@ class DevelopmentMap extends Component {
     return (
       <div style={{height: this.state.mapHeight}}>
         <Map
-          center={[37.062716, -122.005770]}
+          center={[37.062, -122.005]}
           onClick={this._onMapClick}
-          zoom={13}>
+          zoom={11}>
           <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
@@ -103,8 +103,8 @@ function getMarkerIcon (development) {
   const statusesLength = development.data.statuses.length
   if (statusesLength === 0 ||
     (['Application Submitted', 'Permits Issued', 'Under Construction', 'Completed'])
-      .indexOf(development.data.statuses[statusesLength - 1].type) === -1) return mapIcons['?']
-  return mapIcons[development.data.statuses[statusesLength - 1].type]
+      .indexOf(development.data.statuses[0].type) === -1) return mapIcons['?']
+  return mapIcons[development.data.statuses[0].type]
 }
 
 const iconHost = process.env.STATIC_HOST

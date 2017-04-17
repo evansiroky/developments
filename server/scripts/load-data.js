@@ -1,5 +1,6 @@
 const fs = require('fs')
 
+const queue = require('async/queue')
 const csv = require('csv')
 const search = require('isomorphic-mapzen-search').search
 const isEqual = require('lodash.isequal')
@@ -8,6 +9,18 @@ const environment = require('../util/env')
 const env = environment.env
 const settings = environment.settings
 const db = require('../models')
+
+function now () {
+  return (new Date()).getTime()
+}
+
+let lastRequestTime = 0
+const geocodeRequestQueue = queue((task, callback) => {
+  setTimeout(() => {
+    lastRequestTime = now()
+    task(callback)
+  }, Math.max(0, 600 - (now() - lastRequestTime))) // wait at least 0.5 second between requests
+}, 2)
 
 const argv = require('yargs')
   .usage('Usage: $0')
@@ -53,6 +66,7 @@ let numCreated = 0
 let numUpdated = 0
 let numErrors = 0
 let numProcessed = 0
+
 parser.on('readable', () => {
   while(development = parser.read()) {
     if (!columnsChecked) {
@@ -74,6 +88,7 @@ parser.on('readable', () => {
         })
       }
     })
+    statuses.reverse()
     const serializedDevelopment = {
       jurisdiction_id: development.jurisdiction_id,
       parcel_id: development.parcel_id,
@@ -140,26 +155,46 @@ function createDevelopment (development) {
     numProcessed++
   }
 
-  if (!development.lat) {
+  if (!development.geom.coordinates[0]) {
     // geocode development
-    search({
-      apiKey: env.MAPZEN_KEY,
-      text: development.address,
-      boundary: {
-        country: 'US',
-        rect: settings.GEOCODE_BOUNDS
+    geocodeRequestQueue.push((queueCallback) => {
+      let numTries = 0
+      function doGeocodeUntilSuccess () {
+        numTries++
+        search({
+          apiKey: env.MAPZEN_KEY,
+          text: development.data.name,
+          boundary: {
+            country: 'US',
+            rect: settings.GEOCODE_BOUNDS
+          }
+        }).then((geojson) => {
+          if (!geojson || !geojson.features) {
+            if (numTries < maxRetries) {
+              const secondsToWait = Math.pow(2, numTries)
+              console.log(`wait ${secondsToWait} seconds before retrying ${development.data.name}`)
+              setTimeout(doGeocodeUntilSuccess, secondsToWait * 1000)
+            } else {
+              console.error(`Geocoding failed for ${development.data.name} after 5 tries!`)
+              queueCallback(err)
+            }
+          } else if (geojson.features.length === 0) {
+            numErrors++
+            numProcessed++
+            console.log(geojson)
+            console.error(`No geocode results found for: ${development.data.name}`)
+          } else {
+            queueCallback()
+            development.geom.coordinates = geojson.features[0].geometry.coordinates.reverse()
+            db.development.create(development)
+              .then(createdCallback)
+          }
+        })
       }
-    }).then((geojson) => {
-      if (geojson.features.length === 0) {
-        console.warn(`No geocode results found for: ${development.address}`)
-      }
-      development.geom.coordinates = geojson.features[0].geometry.coordinates
-      db.development.create(serializedDevelopment)
-        .then(createdCallback)
+      doGeocodeUntilSuccess()
     })
   } else {
-    console.log(`Create ${development.data.name}`)
-    db.development.create(serializedDevelopment)
+    db.development.create(development)
       .then(createdCallback)
   }
 }

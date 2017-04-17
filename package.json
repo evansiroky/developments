@@ -17,6 +17,7 @@
     "watch:server": "nodemon --watch server server/index.js"
   },
   "devDependencies": {
+    "async": "^2.3.0",
     "csv": "^1.1.1",
     "lodash.isequal": "^4.5.0",
     "nodemon": "^1.11.0",

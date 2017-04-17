@@ -36,6 +36,7 @@ class Development extends Component {
   _onDeleteClick = () => {
     if (window.confirm('Are you sure you want to delete this development?')) {
       this.props.delete(this.state.development.id)
+      this.props.router.history.push('/')
     }
   }
 
@@ -202,16 +203,13 @@ class Development extends Component {
           <div className='development-content'>
             <div className='col-xs-12'>
               <div className={`development-image-container ${data.picture ? '' : 'no-picture-yet'}`}>
-                {data.picture
-                  ? (<img src={data.picture} />)
-                  : (<img src={'https://s3-us-west-1.amazonaws.com/santacruzcountydevelopments/picture-coming-soon.png'} />)
-                }
+                {data.picture && <img src={data.picture} />}
               </div>
             </div>
             <div>
               <div className='col-xs-12 col-sm-4'>
                 <h4>Jurisdiction</h4>
-                <p>{jurisdictionLookup[data.jurisdiction]}</p>
+                <p>{jurisdictionLookup[development.jurisdiction_id]}</p>
                 <h4>Status</h4>
                 <table className='table table-striped'>
                   <tbody>
@@ -269,7 +267,7 @@ class Development extends Component {
                 <h4>Jurisdiction</h4>
                 <select
                   onChange={this._onJurisdictionChange}
-                  value={data.jurisdiction}
+                  value={development.jurisdiction_id}
                   >
                   {jurisdictionLookup.map((jurisdiction, idx) => (
                     <option value={idx}>{jurisdiction}</option>
