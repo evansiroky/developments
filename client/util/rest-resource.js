@@ -22,7 +22,7 @@ export default class RestResource {
   }
 
   collectionGet () {
-    return this._genericRequest(`/api/${this.endpointName}s`)
+    return this._genericRequest(`/api/${this.endpointName}s?count=1000`)
   }
 
   collectionPost (data) {
