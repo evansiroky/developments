@@ -42,7 +42,9 @@ class DevelopmentMap extends Component {
         geom: {
           coordinates: [e.latlng.lat, e.latlng.lng],
           type: 'Point'
-        }
+        },
+        jurisdiction_id: 1,
+        parcel_id: 'unkown'
       })
         .then((development) => {
           router.history.push(`/development/${development.id}`)
