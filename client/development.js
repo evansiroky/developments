@@ -8,7 +8,9 @@ import {withRouter} from 'react-router'
 const jurisdictionLookup = [
   'City of Scotts Valley',
   'City of Santa Cruz',
-  'Santa Cruz County'
+  'Santa Cruz County',
+  'City of Capitola',
+  'City of Watsonville'
 ]
 
 class Development extends Component {
